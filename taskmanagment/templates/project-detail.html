@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ object.name}} Project Detail View
+{% endblock title %}
+
+{% block content %}
+
+<div class="container mt-5">
+  <div class="row justify-content-md-center">
+      <h3 class="text-center text-uppercase text-monospace">{{ object.name}} </h3>
+  </div>
+<hr/>
+  <div class="row justify-content-md-center">
+    <div class="col-md-10">
+{% for area in object.areas.all %}
+    <table class="table mb-5">
+        <thead class="thead-primary">
+            <div class="d-flex justify-content-center bg-primary text-light p-2">
+                <a href="" class="text-light">{{area}}</a>
+            </div>
+          <tr>
+            <th>LES TACHES </th>
+            <th>Debut</th>
+            <th>fin</th>
+            <th>status</th>
+            <th>days</th>
+            <th> % </th>
+            <th>fini</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for t in area.tasks.all %}
+          <tr>
+            <td><a href="{% url 'task-detail' object.id t.id %}">{{ t.name }}</a></td>
+            <td>{{ t.debut }}</td>
+            <td>{{ t.fin }}</td>
+            {% if t.get_status == "ACHEVER" %}
+            <td class="bg-success text-white">{{ t.get_status }}</td>
+            {% elif t.get_status == "EN COURS"  %}
+            <td class="bg-warning text-white">{{ t.get_status }}</td>
+            {% elif t.get_status == "NON COMMENCE"  %}
+            <td class="bg-secondary text-white">{{ t.get_status }}</td>
+            {% else %}
+            <td class="bg-danger text-white">{{ t.get_status }}</td>
+            {% endif %}
+            <td>{{ t.get_task_length }}</td>
+            <td>{{ t.complition_ratio }} % </td>
+            <td><form class="isComplete" method="post" action="{% url 'task-update' t.id %}">{% csrf_token %}
+                <input onclick="complete()" type="checkbox" name="complete" id="id_complete" {% if t.complete %} checked {% endif %} >
+</form></td>
+            
+          {% endfor %}  
+        </tbody>
+      </table><hr/>
+{% endfor %}
+ </div>
+  </div> 
+<!-- {% for tool in object.tools.all %}
+  <p> tool.name - tool.price - tool.quantity </p>
+{% endfor %} -->
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="addTask" tabindex="-1" role="dialog" aria-labelledby="addTaskLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addTaskLabel">Add Task</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="my_form" method="post" action="{% url 'task-create' %}">{% csrf_token %}
+            {{ form.as_p}}        
+      </div>
+      <div class="modal-footer">
+        <button id="mybutton" type="button" class="btn btn-secondary" data-dismiss="modal">Ferme</button>
+        <button type="submit" class="btn btn-primary">Ajouter</button>
+        </form>
+      </div>
+
+</div>
+{% endblock content %}
+{% block javascript %}
+<script>
+  
+</script>
+<script>
+$(document).ready(function(){
+  $( "#my_form" ).on( "submit", function( event ) {
+  event.preventDefault();
+  console.log( $( this ).serialize() );
+});
+  $( ".isComplete" ).on( "click" , function(){
+    this.submit()
+  })
+ 
+});
+</script>
+{% endblock %}
