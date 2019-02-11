@@ -41,6 +41,11 @@ class ProjectDetailView(DetailView):
         return context
 
 
+class AreaCreateView(CreateView):
+    model = Area
+    fields = ["name", "project"]
+    template_name = "add-area.html"
+
 class TaskCreateView(CreateView):
     model = Task
     template_name = 'add-task.html'

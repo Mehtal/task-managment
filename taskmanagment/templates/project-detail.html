@@ -63,7 +63,7 @@
 
 
 
-<!-- Modal -->
+<!-- Modal Task -->
 <div class="modal fade" id="addTask" tabindex="-1" role="dialog" aria-labelledby="addTaskLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -74,7 +74,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <form id="my_form" method="post" action="{% url 'task-create' %}">{% csrf_token %}
+        <form id="task_form" method="post" action="{% url 'task-create' %}">{% csrf_token %}
             {{ form.as_p}}        
       </div>
       <div class="modal-footer">
@@ -82,6 +82,29 @@
         <button type="submit" class="btn btn-primary">Ajouter</button>
         </form>
       </div>
+
+<!-- Modal Area -->
+<div class="modal fade" id="addArea" tabindex="-1" role="dialog" aria-labelledby="addAreaLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addAreaLabel">Add Area</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="area_form" method="post" action="{% url 'area-create' %}">{% csrf_token %}
+            {{ form.as_p}}        
+      </div>
+      <div class="modal-footer">
+        <button id="mybutton" type="button" class="btn btn-secondary" data-dismiss="modal">Ferme</button>
+        <button type="submit" class="btn btn-primary">Ajouter</button>
+        </form>
+      </div>
+
+
+
 
 </div>
 {% endblock content %}
@@ -91,7 +114,7 @@
 </script>
 <script>
 $(document).ready(function(){
-  $( "#my_form" ).on( "submit", function( event ) {
+  $( "#task_form" ).on( "submit", function( event ) {
   event.preventDefault();
   console.log( $( this ).serialize() );
 });

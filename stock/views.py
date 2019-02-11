@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import RestockForm
+from .forms import RestockForm, SendToTaskForm, SupplyForm
 from .models import Supply
 from django.views.generic import UpdateView
+from taskmanagment.models import Tool, Project, Area, Task
 # Create your views here.
 
 
@@ -25,3 +26,45 @@ def add_supply(request, pk):
             item.save()
             return redirect("project_list")
     return render(request, "restock.html", {"form": form})
+
+
+class Restock(UpdateView):
+    model = Supply
+    form_class = SupplyForm
+    template_name = "restock.html"
+    success_url = "/"
+
+    # def form_valid(self, form):
+    #     form.save()
+
+    #     print("----------> ", self.object.name, self.object.quantity, " <---- form_valid")
+    #     return form
+
+
+def send_supply_to_tasks(request):
+    item = Supply.objects.all()
+    project = Project.objects.all()
+    area = Area.objects.all()
+    task = Task.objects.all()
+    """sending tools from stock to task tools"""
+    # getting supply item
+    form = SendToTaskForm()
+    if request.POST:
+        item_id = request.POST.get("name")
+        project_id = request.POST.get("project")
+        area_id = request.POST.get("area")
+        task_id = request.POST.get("task")
+        quantity = request.POST.get("quantity")
+        item = Supply.objects.get(pk=item_id)
+        project = Project.objects.get(pk=project_id)
+        area = Area.objects.get(pk=area_id)
+        task = Task.objects.get(pk=task_id)
+        add_tool = Tool.objects.create(name=item.name, quantity=quantity, unit_price=item.unit_price, task=task, project=project)
+        print("name is  : ", item_id)
+        print("quantity : ", quantity)
+        print(item.name, project.name, area.name)
+        if form.is_valid():
+            add_tool.save()
+            form.save()
+
+    return render(request, "restock.html", {"form": form, })

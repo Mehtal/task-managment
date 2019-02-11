@@ -82,9 +82,15 @@ class Task(models.Model):
 class Tool(models.Model):
     name = models.CharField(max_length=100)
     quantity = models.PositiveIntegerField()
-    price = models.DecimalField(max_digits=11, decimal_places=2)
+    unit_price = models.DecimalField(max_digits=11, decimal_places=2)
+    task = models.ForeignKey(
+        Task, on_delete=models.CASCADE, related_name='tools')
     project = models.ForeignKey(
         Project, on_delete=models.CASCADE, related_name='tools')
 
     def __str__(self):
         return self.name
+
+    def get_total(self):
+        total = self.quantity * self.unit_price
+        return total

@@ -4,15 +4,15 @@
 {% block content%}
 <div class="container">
 	<div class="row pt-5">
-    {% for project in projects %}
     <div class="card">
     <ul class="list-group list-group-flush">
+      {% for project in projects %}
     	<li class="list-group-item col-md-12">
     		<a href="{% url 'project-detail' project.id %}"><h1>{{ project.id}} - {{project.name}}</h1></a> 
     	</li>
+      {% endfor %}
     </ul>
     </div>
-    {% endfor %}
     </div>
 </div>
 
