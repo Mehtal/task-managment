@@ -52,16 +52,17 @@ class SendToTaskForm(forms.ModelForm):
     project = forms.ModelChoiceField(queryset=Project.objects.all())
     area = forms.ModelChoiceField(queryset=Project.objects.all())
     task = forms.ModelChoiceField(queryset=Area.objects.all())
+    name = forms.ModelChoiceField(queryset=Supply.objects.all())
 
     class Meta:
         model = Supply
-        fields = ["name", "quantity", "unit_price"]
+        fields = ["name", "quantity", ]
 
     def __init__(self, *args, **kwargs):
         super(SendToTaskForm, self).__init__(*args, **kwargs)
         self.fields['name'].queryset = Supply.objects.all()
         self.fields['project'].queryset = Project.objects.all()
-        self.fields['area'].queryset = Area.objects.filter(project__id=self.fields['project'])
+        self.fields['area'].queryset = Area.objects.all()
         self.fields['task'].queryset = Task.objects.all()
 
     def clean(self):

@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm
-from .models import Task
+from .models import Task, Project, Area
 
 
 class CreateTaskForm(ModelForm):
@@ -11,5 +11,11 @@ class CreateTaskForm(ModelForm):
 
 class CreateProjectForm(ModelForm):
     class Meta:
-        model = Task
+        model = Project
         fields = ['name', ]
+
+
+class CreateAreaForm(ModelForm):
+    class Meta:
+        model = Area
+        fields = ['name', 'project']

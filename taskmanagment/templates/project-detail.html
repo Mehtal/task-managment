@@ -5,107 +5,127 @@
 {% endblock title %}
 
 {% block content %}
-
-<div class="container mt-5">
+<div class="content">
+  <div class="container mt-5">
   <div class="row justify-content-md-center">
-      <h3 class="text-center text-uppercase text-monospace">{{ object.name}} </h3>
+    <h3 class="text-center text-uppercase text-monospace">{{ object.name}} </h3>
   </div>
-<hr/>
+  <hr/>
   <div class="row justify-content-md-center">
-    <div class="col-md-10">
-{% for area in object.areas.all %}
-    <table class="table mb-5">
+      
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addAreaModal">
+  Ajouter Une Location
+</button>
+<button type="button" class="btn btn-sucess" data-toggle="modal" data-target="#addTaskModal">
+  Ajouter Une tache
+</button>
+ 
+    <div class="col-md-12">
+      {% for area in object.areas.all %}
+      <table class="table mb-5">
         <thead class="thead-primary">
-            <div class="d-flex justify-content-center bg-primary text-light p-2">
-                <a href="" class="text-light">{{area}}</a>
-            </div>
+          <div class="d-flex justify-content-center bg-primary text-light p-2">
+            <a href="" class="text-light">{{area}}</a>
+          </div>
           <tr>
-            <th>LES TACHES </th>
-            <th>Debut</th>
-            <th>fin</th>
-            <th>status</th>
-            <th>days</th>
-            <th> % </th>
-            <th>fini</th>
+          <th>LES TACHES </th>
+          <th>Debut</th>
+          <th>fin</th>
+          <th>status</th>
+          <th>days</th>
+          <th> % </th>
+          <th>fini</th>
           </tr>
         </thead>
         <tbody>
-        {% for t in area.tasks.all %}
+          {% for t in area.tasks.all %}
           <tr>
-            <td><a href="{% url 'task-detail' object.id t.id %}">{{ t.name }}</a></td>
-            <td>{{ t.debut }}</td>
-            <td>{{ t.fin }}</td>
-            {% if t.get_status == "ACHEVER" %}
-            <td class="bg-success text-white">{{ t.get_status }}</td>
-            {% elif t.get_status == "EN COURS"  %}
-            <td class="bg-warning text-white">{{ t.get_status }}</td>
-            {% elif t.get_status == "NON COMMENCE"  %}
-            <td class="bg-secondary text-white">{{ t.get_status }}</td>
-            {% else %}
-            <td class="bg-danger text-white">{{ t.get_status }}</td>
-            {% endif %}
-            <td>{{ t.get_task_length }}</td>
-            <td>{{ t.complition_ratio }} % </td>
-            <td><form class="isComplete" method="post" action="{% url 'task-update' t.id %}">{% csrf_token %}
-                <input onclick="complete()" type="checkbox" name="complete" id="id_complete" {% if t.complete %} checked {% endif %} >
-</form></td>
-            
+          <td><a href="{% url 'task:task-detail' object.id t.id %}">{{ t.name }}</a></td>
+          <td>{{ t.debut }}</td>
+          <td>{{ t.fin }}</td>
+          {% if t.get_status == "ACHEVER" %}
+          <td class="bg-success text-white">{{ t.get_status }}</td>
+          {% elif t.get_status == "EN COURS"  %}
+          <td class="bg-warning text-white">{{ t.get_status }}</td>
+          {% elif t.get_status == "NON COMMENCE"  %}
+          <td class="bg-secondary text-white">{{ t.get_status }}</td>
+          {% else %}
+          <td class="bg-danger text-white">{{ t.get_status }}</td>
+          {% endif %}
+          <td>{{ t.get_task_length }}</td>
+          <td>{{ t.complition_ratio }} % </td>
+          <td><form class="isComplete" method="post" action="{% url 'task:task-update' t.id %}">{% csrf_token %}
+          <input onclick="complete()" type="checkbox" name="complete" id="id_complete" {% if t.complete %} checked {% endif %} >
+          </form></td>
+
           {% endfor %}  
         </tbody>
       </table><hr/>
-{% endfor %}
- </div>
+      {% endfor %}
+    </div>
   </div> 
-<!-- {% for tool in object.tools.all %}
-  <p> tool.name - tool.price - tool.quantity </p>
-{% endfor %} -->
 
 
 
+ <!--  <form id="area_form" method="post" action="{% url 'task:area-create' %}">{% csrf_token %}
+  {{ form.as_p}}        
+  <button id="mybutton" type="button" class="btn btn-secondary" data-dismiss="modal">Ferme</button>
+  <button type="submit" class="btn btn-primary">Ajouter</button>
+  </form> -->
+  </div>
+</div>
 
-<!-- Modal Task -->
-<div class="modal fade" id="addTask" tabindex="-1" role="dialog" aria-labelledby="addTaskLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
+
+<!-- Modal -->
+<div class="modal fade" id="addAreaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog " role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="addTaskLabel">Add Task</h5>
+        <h5 class="modal-title" id="exampleModalLongTitle">Ajouter Une Location</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <form id="task_form" method="post" action="{% url 'task-create' %}">{% csrf_token %}
-            {{ form.as_p}}        
+          <form id="area_form" method="post" action="{% url 'task:area-create' %}">{% csrf_token %}
+          {{ area_form.as_p}} 
+          <hr/>     
+          <button id="mybutton" type="button" class="btn btn-secondary" data-dismiss="modal">Ferme</button>
+          <button type="submit" class="btn btn-primary">Ajouter</button>
+          </form>
       </div>
-      <div class="modal-footer">
-        <button id="mybutton" type="button" class="btn btn-secondary" data-dismiss="modal">Ferme</button>
-        <button type="submit" class="btn btn-primary">Ajouter</button>
-        </form>
-      </div>
+      <!-- <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div> -->
+    </div>
+  </div>
+</div>
 
-<!-- Modal Area -->
-<div class="modal fade" id="addArea" tabindex="-1" role="dialog" aria-labelledby="addAreaLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
+<!-- Modal -->
+<div class="modal fade" id="addTaskModal" tabindex="-1" role="dialog"  aria-hidden="true">
+  <div class="modal-dialog " role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="addAreaLabel">Add Area</h5>
+        <h5 class="modal-title" id="exampleModalLongTitle">Ajouter Une Tache</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <form id="area_form" method="post" action="{% url 'area-create' %}">{% csrf_token %}
-            {{ form.as_p}}        
+          <form id="task_form" method="post" action="{% url 'task:task-create' %}">{% csrf_token %}
+          {{ task_form.as_p}} 
+          <hr/>     
+          <button id="mybutton" type="button" class="btn btn-secondary" data-dismiss="modal">Ferme</button>
+          <button type="submit" class="btn btn-primary">Ajouter</button>
+          </form>
       </div>
-      <div class="modal-footer">
-        <button id="mybutton" type="button" class="btn btn-secondary" data-dismiss="modal">Ferme</button>
-        <button type="submit" class="btn btn-primary">Ajouter</button>
-        </form>
-      </div>
-
-
-
-
+      <!-- <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div> -->
+    </div>
+  </div>
 </div>
 {% endblock content %}
 {% block javascript %}
@@ -114,10 +134,10 @@
 </script>
 <script>
 $(document).ready(function(){
-  $( "#task_form" ).on( "submit", function( event ) {
+/*  $( "#task_form" ).on( "submit", function( event ) {
   event.preventDefault();
   console.log( $( this ).serialize() );
-});
+});*/
   $( ".isComplete" ).on( "click" , function(){
     this.submit()
   })

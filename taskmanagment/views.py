@@ -1,7 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, reverse
 from django.views.generic import DetailView, ListView, CreateView, UpdateView
 from taskmanagment.models import Project, Tool, Task, Area
-from .forms import CreateTaskForm, CreateProjectForm
+from .forms import CreateTaskForm, CreateProjectForm, CreateAreaForm
 # Create your views here.
 
 
@@ -9,6 +9,10 @@ def ProjectView(request):
     project = Project.objects.all()
     template = 'project.html'
     return render(request, template, {'project': project})
+
+
+def dashboard(request):
+    return render(request, 'dashboard.html', {})
 
 
 class ProjectCreateView(CreateView):
@@ -33,11 +37,12 @@ class ProjectDetailView(DetailView):
     template_name = 'project-detail.html'
 
     def get_queryset(self):
-        return Project.objects.all().prefetch_related('areas__tasks')
+        return Project.objects.all().prefetch_related('areas', 'areas__tasks', 'areas__project')
 
     def get_context_data(self, **kwargs):
         context = super(ProjectDetailView, self).get_context_data(**kwargs)
-        context['form'] = CreateTaskForm()
+        context['area_form'] = CreateAreaForm()
+        context['task_form'] = CreateTaskForm()
         return context
 
 
@@ -46,6 +51,7 @@ class AreaCreateView(CreateView):
     fields = ["name", "project"]
     template_name = "add-area.html"
 
+
 class TaskCreateView(CreateView):
     model = Task
     template_name = 'add-task.html'
@@ -53,8 +59,17 @@ class TaskCreateView(CreateView):
 
 
 class TaskDetailView(DetailView):
-    model = Task
+    #model = Task
     template_name = 'task-detail.html'
+
+    def get_queryset(self):
+        queryset = Task.objects.all().select_related("area", "area__project")
+        return queryset
+
+    def get_sum(self, my_sum=0):
+        for tool in self.object.tools.all():
+            my_sum += tool.get_total()
+        return my_sum
 
 
 class TaskUpdateView(UpdateView):

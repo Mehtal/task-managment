@@ -59,12 +59,21 @@ def send_supply_to_tasks(request):
         project = Project.objects.get(pk=project_id)
         area = Area.objects.get(pk=area_id)
         task = Task.objects.get(pk=task_id)
-        add_tool = Tool.objects.create(name=item.name, quantity=quantity, unit_price=item.unit_price, task=task, project=project)
-        print("name is  : ", item_id)
-        print("quantity : ", quantity)
-        print(item.name, project.name, area.name)
+        if item.quantity >= int(quantity):
+            Tool.objects.create(name=item.name, quantity=quantity, unit_price=item.unit_price, task=task,)
+            print("first item quantity", item.quantity, item)
+            item.quantity -= int(quantity)
+            item.save()
+        else:
+            raise ValueError("this is my value ValueError")
+            print("this is the ValueError")
+
+        # print("name is  : ", item_id)
+        # print("quantity : ", quantity)
+        # print(item.name, project.name, area.name)
         if form.is_valid():
+
             add_tool.save()
             form.save()
 
-    return render(request, "restock.html", {"form": form, })
+    return render(request, "send.html", {"form": form, })

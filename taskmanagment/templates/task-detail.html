@@ -5,10 +5,13 @@
 {% endblock title %}
 
 {% block content %}
-<div class="container h-100">
-	<div class="row h-100 justify-content-center align-items-center" >
-		<div class="card">
-		  <h3 class="card-header bg-primary text-white">{{ object.name }}</h3>
+<div class="container mt-5">
+	 <div class="row justify-content-md-center">
+    <h3 class="text-center text-uppercase text-monospace">{{ object.name}} </h3>
+  </div>
+	<div class="row">
+		<div class="card col-md-6">
+		  <h3 class="card-header bg-primary text-white font-italic">{{ object.name }}</h3>
 		  <div class="card-body">
 		    <h4 class="card-title">{{ object.area }}</h4>
 		    <ul class="list-group list-group-flush">
@@ -18,11 +21,35 @@
 			    <li class="list-group-item">complition : {{ object.complete }}</li>
 			    <li class="list-group-item">{% if object.task_info %} {{ object.task_info }} {% else%} task is not comeplte yet {% endif %} </li>
 		  	</ul>
-		    <a href="{% url 'project-detail' object.area.project.id %}" class="btn btn-primary">Retour</a>
+		    <a href="{% url 'task:project-detail' object.area.project.id %}" class="btn btn-primary">Retour</a>
 		  </div>
 		</div>
-
+		<table class="table table-bordred">
+		<thead class="bg-primary">
+	    <tr class="font-italic">
+	      <th>Tool</th>
+	      <th>Quantity</th>
+	      <th>Unit Price</th>
+	      <th>Total</th>
+	    </tr>
+	  </thead>
+	  <tbody>
+	  	{% for tool in object.tools.all %}
+	    <tr>
+	      <td>{{ tool }}</td>
+	      <td>{{ tool.quantity }}</td>
+	      <td>{{ tool.unit_price }} $</td>
+	      <td>{{ tool.get_total }} $</td>
+	    </tr>
+	    
+	    {% endfor %}
+	     </tbody>
+		</table>
+		<div>
+			<h4 class="text-primary">task total price {{ view.get_sum }} $</h4>
+		</div>
 
 	</div>
+	
 </div>
 {% endblock content %}
