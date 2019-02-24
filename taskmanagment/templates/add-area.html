@@ -5,6 +5,7 @@
 <h1> Area Creation Form </h1>
 <form method="post">{% csrf_token %}
     {{ form.as_p }}
+    {{ form.media }}
     <input type="submit" value="add">
 </form>
 {% endblock %}

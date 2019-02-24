@@ -5,12 +5,13 @@
 {% endblock title %}
 
 {% block content %}
-<div class="container mt-5">
+<div class="container p-5">
 	 <div class="row justify-content-md-center">
-    <h3 class="text-center text-uppercase text-monospace">{{ object.name}} </h3>
+    <h3 class="text-center text-uppercase text-monospace">{{ object.name}}  {{ view.get_sum }} $</h3>
   </div>
-	<div class="row">
-		<div class="card col-md-6">
+  <div class="row">
+  	<div class="col-md-4 ">
+  		<div class="card">
 		  <h3 class="card-header bg-primary text-white font-italic">{{ object.name }}</h3>
 		  <div class="card-body">
 		    <h4 class="card-title">{{ object.area }}</h4>
@@ -24,6 +25,29 @@
 		    <a href="{% url 'task:project-detail' object.area.project.id %}" class="btn btn-primary">Retour</a>
 		  </div>
 		</div>
+  	</div>
+ 	 <div class="col-md-8 ">
+		<div class="col-md-12">
+			<div class="progress">
+			  <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: {{ object.complition_ratio }}%"></div>
+			</div>
+
+			<canvas id="myChart" class="card card-chart"></canvas>
+		</div>
+		<div class="col-md-4">
+			
+		</div>
+		<div class="col-md-4">
+			
+		</div>
+		<div class="col-md-4">
+			
+		</div>
+		
+  </div>
+  </div>
+	<div class="row">
+		<div class="col-md-8">
 		<table class="table table-bordred">
 		<thead class="bg-primary">
 	    <tr class="font-italic">
@@ -36,7 +60,7 @@
 	  <tbody>
 	  	{% for tool in object.tools.all %}
 	    <tr>
-	      <td>{{ tool }}</td>
+	      <td class>{{ tool }}</td>
 	      <td>{{ tool.quantity }}</td>
 	      <td>{{ tool.unit_price }} $</td>
 	      <td>{{ tool.get_total }} $</td>
@@ -45,11 +69,41 @@
 	    {% endfor %}
 	     </tbody>
 		</table>
-		<div>
-			<h4 class="text-primary">task total price {{ view.get_sum }} $</h4>
+		</div>
+		<div class="col-md-4">
+			
+<script>
+var ctx = document.getElementById("myChart").getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'pie',
+    data: {
+        labels: [{% for tool in object.tools.all %} "{{ tool.name }}" ,{% endfor %}],
+        datasets: [{
+            label: 'Tools Price',
+            data: [{% for tool in object.tools.all %} {{ tool.get_total }}, {% endfor %}],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+           
+        }]
+    },
+   
+});
+
+</script>
+			
+		</div>
+		
+		
+			
 		</div>
 
-	</div>
+	
 	
 </div>
 {% endblock content %}

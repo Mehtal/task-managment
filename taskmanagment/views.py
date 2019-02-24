@@ -2,6 +2,7 @@ from django.shortcuts import render, reverse
 from django.views.generic import DetailView, ListView, CreateView, UpdateView
 from taskmanagment.models import Project, Tool, Task, Area
 from .forms import CreateTaskForm, CreateProjectForm, CreateAreaForm
+from django.urls import reverse_lazy
 # Create your views here.
 
 
@@ -50,6 +51,9 @@ class AreaCreateView(CreateView):
     model = Area
     fields = ["name", "project"]
     template_name = "add-area.html"
+    success_url = "/"
+
+
 
 
 class TaskCreateView(CreateView):

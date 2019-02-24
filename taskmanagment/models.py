@@ -76,7 +76,7 @@ class Task(models.Model):
                 return "you've finished on timedelta"
 
     def get_absolute_url(self):
-        return reverse('task-detail', args=[str(self.area.project.id), str(self.id,)])
+        return reverse('task:task-detail', args=[str(self.area.project.id), str(self.id,)])
 
 
 class Tool(models.Model):

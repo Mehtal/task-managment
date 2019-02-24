@@ -6,23 +6,24 @@
 
 {% block content %}
 <div class="content">
-  <div class="container mt-5">
+  <div class="container p-5">
   <div class="row justify-content-md-center">
     <h3 class="text-center text-uppercase text-monospace">{{ object.name}} </h3>
   </div>
   <hr/>
-  <div class="row justify-content-md-center">
+  <div class="row">
       
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addAreaModal">
-  Ajouter Une Location
+  Ajouter Une Location 
 </button>
 <button type="button" class="btn btn-sucess" data-toggle="modal" data-target="#addTaskModal">
-  Ajouter Une tache
+  Ajouter Une tache 
 </button>
- 
+
+
     <div class="col-md-12">
       {% for area in object.areas.all %}
-      <table class="table mb-5">
+      <table class="table mb-5 table-hover">
         <thead class="thead-primary">
           <div class="d-flex justify-content-center bg-primary text-light p-2">
             <a href="" class="text-light">{{area}}</a>
@@ -63,6 +64,7 @@
       </table><hr/>
       {% endfor %}
     </div>
+
   </div> 
 
 
@@ -89,6 +91,7 @@
       <div class="modal-body">
           <form id="area_form" method="post" action="{% url 'task:area-create' %}">{% csrf_token %}
           {{ area_form.as_p}} 
+          {{ area_form.media }}
           <hr/>     
           <button id="mybutton" type="button" class="btn btn-secondary" data-dismiss="modal">Ferme</button>
           <button type="submit" class="btn btn-primary">Ajouter</button>
@@ -115,6 +118,7 @@
       <div class="modal-body">
           <form id="task_form" method="post" action="{% url 'task:task-create' %}">{% csrf_token %}
           {{ task_form.as_p}} 
+          {{ task_form.media }}
           <hr/>     
           <button id="mybutton" type="button" class="btn btn-secondary" data-dismiss="modal">Ferme</button>
           <button type="submit" class="btn btn-primary">Ajouter</button>
