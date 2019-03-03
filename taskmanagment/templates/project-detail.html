@@ -7,23 +7,23 @@
 {% block content %}
 <div class="content">
   <div class="container p-5">
-  <div class="row justify-content-md-center">
-    <h3 class="text-center text-uppercase text-monospace">{{ object.name}} </h3>
+  <div class="row p-4 bg-ios">
+    <p class="text-center text-uppercase text-monospace display-2 w-100">{{ object.name}} {{ project.id }} </p>
   </div>
   <hr/>
-  <div class="row">
+  <div class="row d-flex">
       
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addAreaModal">
-  Ajouter Une Location 
+    <button type="button" class="btn btn-danger mr-2" data-toggle="modal" data-target="#addAreaModal"><i class="fas fa-project-diagram mr-2"></i> Ajouter Une Location 
 </button>
-<button type="button" class="btn btn-sucess" data-toggle="modal" data-target="#addTaskModal">
-  Ajouter Une tache 
+<button type="button" class="btn btn-danger mr-2" data-toggle="modal" data-target="#addTaskModal"><i class="fas fa-tasks mr-2"></i>Ajouter Une tache 
+</button>
+<button type="button" class="btn btn-danger text-white delete-btn" aria-label="Close" data-toggle="modal" data-target="#removeProject"> <span aria-hidden="true"><i class="far fa-trash-alt mr-2"></i>Suprimer</span>
 </button>
 
 
-    <div class="col-md-12">
+    <div class="col-md-12 mt-5">
       {% for area in object.areas.all %}
-      <table class="table mb-5 table-hover">
+      <table class="table mb-5 table-hover bg-ios">
         <thead class="thead-primary">
           <div class="d-flex justify-content-center bg-primary text-light p-2">
             <a href="" class="text-light">{{area}}</a>
@@ -35,7 +35,7 @@
           <th>status</th>
           <th>days</th>
           <th> % </th>
-          <th>fini</th>
+          <th>update</th>
           </tr>
         </thead>
         <tbody>
@@ -55,9 +55,12 @@
           {% endif %}
           <td>{{ t.get_task_length }}</td>
           <td>{{ t.complition_ratio }} % </td>
-          <td><form class="isComplete" method="post" action="{% url 'task:task-update' t.id %}">{% csrf_token %}
+         <!--  <td><form class="isComplete" method="post" action="{% url 'task:task-update' t.id %}">{% csrf_token %}
           <input onclick="complete()" type="checkbox" name="complete" id="id_complete" {% if t.complete %} checked {% endif %} >
-          </form></td>
+          </form></td> -->
+          <td>
+            <a href="{% url 'task:task-update' t.id %}"><i class="fas fa-wrench"></i></a>
+          </td>
 
           {% endfor %}  
         </tbody>
@@ -131,6 +134,27 @@
     </div>
   </div>
 </div>
+         <!-- Modal -->
+<div class="modal fade" id="removeProject" tabindex="-1" role="dialog" aria-labelledby="removeProjectLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addTaskLabel">Suprimer le Projet</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="post" action="{% url 'task:project-delete' project.id %}">{% csrf_token %}
+            <p>Are you sure you want to delete "{{ object }}"?</p>
+      
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Ferme</button>
+        <button type="submit" class="btn btn-primary">Suprimer</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock content %}
 {% block javascript %}
 <script>
@@ -147,5 +171,19 @@ $(document).ready(function(){
   })
  
 });
+</script>
+
+
+
+
+<script type="text/javascript">
+   $('#id_fin').datepicker({
+           
+            format: 'yyyy-mm-dd'
+        });
+   $('#id_debut').datepicker({
+           
+            format: 'yyyy-mm-dd'
+        });
 </script>
 {% endblock %}

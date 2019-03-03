@@ -6,11 +6,42 @@
 
 {% block content %}
 <div class="container p-5">
-	 <div class="row justify-content-md-center">
-    <h3 class="text-center text-uppercase text-monospace">{{ object.name}}  {{ view.get_sum }} $</h3>
+	 <div class="row p-4 bg-ios">
+    <p class="text-center text-uppercase text-monospace display-2 w-100">{{ object.name}}  {{ view.get_sum }} $</p>
   </div>
   <div class="row">
-  	<div class="col-md-4 ">
+  	<div class="col-md-4 p-4 ios-card">
+  		<div class="card bg-ios h-100">
+  			
+  		</div>
+  		
+  	</div>
+  	<div class="col-md-4 p-4 ios-card">
+  		<div class="card bg-ios h-100">
+  			<h4 class="card-title w-100 text-center text-uppercase">{{ object.get_start_time }}</h4>
+  			
+  		</div>
+  		
+  	</div>
+  	<div class="col-md-4 p-4 ios-card">
+  		<div class="card bg-ios h-100">
+  			<h4 class="card-title w-100 text-center text-uppercase">{{ object.area.project }}</h4>
+  			<h4 class="card-title w-100 text-center text-uppercase">{{ object.area.name }}</h4>
+  			<h4 class="card-title w-100 text-center text-uppercase">
+  				<i class="fas fa-battery-half mr-2"></i> {{ object.get_status }} {{ object.complition_ratio }}%
+  			</h4>
+  			<h4 class="card-title w-100 text-center text-uppercase">
+  				{% if object.task_info %} {{ object.task_info }} {% else%} task is not comeplte yet {% endif %}
+  			</h4>
+  			<h4 class="text-center">{{ object.debut }}</h4>
+  			<h4 class="text-center">{{ object.fin }}</h4>
+  		</div>
+  		
+  	</div>
+  </div>
+
+  <div class="row mt-5">
+  <!-- 	<div class="col-md-4 ">
   		<div class="card">
 		  <h3 class="card-header bg-primary text-white font-italic">{{ object.name }}</h3>
 		  <div class="card-body">
@@ -25,29 +56,8 @@
 		    <a href="{% url 'task:project-detail' object.area.project.id %}" class="btn btn-primary">Retour</a>
 		  </div>
 		</div>
-  	</div>
- 	 <div class="col-md-8 ">
+  	</div> -->
 		<div class="col-md-12">
-			<div class="progress">
-			  <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: {{ object.complition_ratio }}%"></div>
-			</div>
-
-			<canvas id="myChart" class="card card-chart"></canvas>
-		</div>
-		<div class="col-md-4">
-			
-		</div>
-		<div class="col-md-4">
-			
-		</div>
-		<div class="col-md-4">
-			
-		</div>
-		
-  </div>
-  </div>
-	<div class="row">
-		<div class="col-md-8">
 		<table class="table table-bordred">
 		<thead class="bg-primary">
 	    <tr class="font-italic">
@@ -70,12 +80,24 @@
 	     </tbody>
 		</table>
 		</div>
-		<div class="col-md-4">
-			
+		<div class="col-md-12 mt-5">
+			<div class="progress">
+			  <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: {{ object.complition_ratio }}%"></div>
+			</div>
+
+			<canvas id="myChart" class="card card-chart"></canvas>
+		</div>
+		
+ 
+  </div>
+	<div class="row">
+		
+		
+	</div>	
 <script>
 var ctx = document.getElementById("myChart").getContext('2d');
 var myChart = new Chart(ctx, {
-    type: 'pie',
+    type: 'bar',
     data: {
         labels: [{% for tool in object.tools.all %} "{{ tool.name }}" ,{% endfor %}],
         datasets: [{
@@ -97,11 +119,10 @@ var myChart = new Chart(ctx, {
 
 </script>
 			
-		</div>
-		
+				
 		
 			
-		</div>
+		
 
 	
 	

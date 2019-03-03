@@ -8,10 +8,16 @@ from .models import Task, Project, Area
 class CreateTaskForm(ModelForm):
     debut = forms.DateField(widget=DateTimeInput())
     fin = forms.DateField(widget=DateInput())
+    # area = forms.ModelChoiceField(queryset=Area.objects.none())
 
     class Meta:
         model = Task
         fields = ['area', 'name', 'debut', 'fin', ]
+
+    # def __init__(self,  *args, **kwargs):
+    #     super().__init__( *args, **kwargs)
+    #     project_id = request.GET.get("id")
+    #     self.fields['area'].queryset = Area.objects.filter(id=project_id)
 
 
 class CreateProjectForm(ModelForm):

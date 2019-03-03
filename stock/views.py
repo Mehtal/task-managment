@@ -1,9 +1,22 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse_lazy
 from .forms import RestockForm, SendToTaskForm, SupplyForm
 from .models import Supply
-from django.views.generic import UpdateView
+from django.views.generic import UpdateView, CreateView, ListView
 from taskmanagment.models import Tool, Project, Area, Task
 # Create your views here.
+
+
+class SupplyCreateView(CreateView):
+    model = Supply
+    template_name = "supply-create.html"
+    fields = ["name", "quantity", "unit_price"]
+    success_url = reverse_lazy("stock:supply-list")
+
+
+class SupplyListView(ListView):
+    queryset = Supply.objects.all()
+    template_name = "supply-list.html"
 
 
 def add_supply(request, pk):
@@ -24,15 +37,15 @@ def add_supply(request, pk):
             item.quantity = quantity
             # important need to save the object
             item.save()
-            return redirect("project_list")
+            return redirect("stock:supply-list")
     return render(request, "restock.html", {"form": form})
 
 
-class Restock(UpdateView):
+class SupplyUpdateView(UpdateView):
     model = Supply
     form_class = SupplyForm
     template_name = "restock.html"
-    success_url = "/"
+    success_url = reverse_lazy("stock:supply-list")
 
     # def form_valid(self, form):
     #     form.save()

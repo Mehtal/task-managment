@@ -5,12 +5,18 @@
 
 <div class="container">
 <h1> Tasks Creation Form </h1>
-<form method="post">{% csrf_token %}
-    {{ form.as_p }}
-    {{ form.media }}
-  
-    <input type="submit" value="Save">
-</form>
+<div class="row">
+	<div class="col-md-6">
+		<form method="post">{% csrf_token %}
+		    {{ form.as_p }}
+		    {{ form.media }}
+		  
+		    <input type="submit" value="Save">
+		</form>
+		
+	</div>
+</div>
+
 </div>
 {% endblock %}
 {% block javascript %}
@@ -22,7 +28,7 @@
            
             format: 'yyyy-mm-dd'
         });
-	 $('#id_fin').datepicker({
+	 $('#id_debut').datepicker({
            
             format: 'yyyy-mm-dd'
         });

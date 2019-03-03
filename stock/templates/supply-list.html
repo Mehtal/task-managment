@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container">
+    	<div class="row p-4 bg-ios mb-5">
+    <p class="text-center text-uppercase text-monospace display-2 w-100">Stock List</p>
+  </div>
+
+        <div class="row">
+        	<div class="col-md-12">
+        		        			       		
+        		<table class="table mb-5 table-hover bg-ios">
+        			<thead class="bg-primary">
+        				<tr>
+        					<th> name </th>
+        					<th> quantity </th>
+        					<th> unite price </th>
+        					<th> total </th>
+        					<th>last modefied </th>
+        				</tr>
+        			</thead>
+        			<tbody>
+        				{% for supply in object_list %}
+        				<tr>
+        					<td>{{ supply.name  }}</td>
+        					<td>{{ supply.quanity  }}</td>
+        					<td>{{ supply.unit_price  }}</td>
+        					<td>{{ supply.get_total  }}</td>
+        					<td>{{ supply.last_modefied }}</td>
+        					
+        				</tr>
+        				{% endfor %}
+        			</tbody>
+        		</table>
+        	</div>
+        </div>	
+	</div>
+
+
+{% endblock %}

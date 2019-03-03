@@ -1,20 +1,19 @@
 from django.contrib import admin
 from django.urls import path, include
 from taskmanagment import views
-from stock import views as stock_views
 from django.conf import settings
 from django.conf.urls.static import static
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('admin/doc', include('django.contrib.admindocs.urls')),
     path('api-auth/', include('rest_framework.urls')),
     path('api/', include('taskmanagment.api.urls')),
     #path('', views.dashboard),
     path('', include('taskmanagment.urls', namespace="task")),
-    path('restock/<int:pk>', stock_views.add_supply, name="restock"),
-    path('send/', stock_views.send_supply_to_tasks, name="send"),
-    path("r/<int:pk>", stock_views.Restock.as_view()),
+    path('stock/', include('stock.urls', namespace="stock")),
+
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

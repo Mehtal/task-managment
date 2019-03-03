@@ -1,19 +1,20 @@
 from django.shortcuts import render, reverse
-from django.views.generic import DetailView, ListView, CreateView, UpdateView
+from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
 from taskmanagment.models import Project, Tool, Task, Area
 from .forms import CreateTaskForm, CreateProjectForm, CreateAreaForm
 from django.urls import reverse_lazy
 # Create your views here.
 
 
-def ProjectView(request):
-    project = Project.objects.all()
-    template = 'project.html'
-    return render(request, template, {'project': project})
+# project CRUD
+# def ProjectView(request):
+#     project = Project.objects.all()
+#     template = 'project.html'
+#     return render(request, template, {'project': project})
 
 
-def dashboard(request):
-    return render(request, 'dashboard.html', {})
+# def dashboard(request):
+#     return render(request, 'dashboard.html', {})
 
 
 class ProjectCreateView(CreateView):
@@ -29,7 +30,8 @@ class ProjectListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(ProjectListView, self).get_context_data(**kwargs)
-        context['form'] = CreateProjectForm()
+        context['create_form'] = CreateProjectForm()
+        context['delete_form'] = CreateProjectForm()
         return context
 
 
@@ -47,19 +49,26 @@ class ProjectDetailView(DetailView):
         return context
 
 
+class ProjectDeleteView(DeleteView):
+    model = Project
+    success_url = reverse_lazy("task:project-list")
+    template_name = "delete-project.html"
+
+
+# AREA CRUD
 class AreaCreateView(CreateView):
-    model = Area
-    fields = ["name", "project"]
+    form_class = CreateAreaForm
+    # fields = ["name", "project"]
     template_name = "add-area.html"
     success_url = "/"
 
 
-
+# TASK CRUD
 
 class TaskCreateView(CreateView):
-    model = Task
+    form_class = Task
     template_name = 'add-task.html'
-    fields = ['area', 'name', 'debut', 'fin', ]
+    # fields = ['area', 'name', 'debut', 'fin', ]
 
 
 class TaskDetailView(DetailView):
@@ -74,6 +83,8 @@ class TaskDetailView(DetailView):
         for tool in self.object.tools.all():
             my_sum += tool.get_total()
         return my_sum
+
+    
 
 
 class TaskUpdateView(UpdateView):

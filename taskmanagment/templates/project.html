@@ -2,35 +2,6 @@
 {% load static %}
 
 
-<div class="container">
-	<div class="row pt-5">
-    
-    <div class="card ">
-    <ul class="list-group list-group-flush">
-      {% for project in projects %}
-    	<li class="list-group-item col-md-">
-    		<a href="{% url 'task:project-detail' project.id %}"><h1>{{ project.id}} - {{project.name}}</h1></a> 
-    	</li>
-      {% endfor %}
-    </ul>
-    </div>
-    </div>
-</div>
-<hr/><hr/><hr/>
-
-<div  id="app" class="container">
-  <div class="row pt-5">
-    <div class="card">
-    <ul class="list-group list-group-flush text-danger">
-      <li>{{ test }} </li>
-    </ul>
-    </div>
-    </div>
-</div>
-
-
-
-
 <!-- Modal -->
 <div class="modal fade" id="addProject" tabindex="-1" role="dialog" aria-labelledby="addProjectLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -55,6 +26,8 @@
 
 
 
+
+
  {% block javascript %}
  <!-- <script>
    var app = new Vue({
@@ -68,67 +41,59 @@
 
 
 {% block content %}
+<div class="container">
+  <div class="row">
+   <!-- your content here -->
+   <div class="col-md-12">
+    <a class="btn btn-primary mb-5" data-toggle="collapse" href="#addProject" aria-expanded="true" aria-controls="blogForm">Ajouter Un Project</a>
+<!-- <button data-toggle="collapse" data-target="#demo">Collapsible</button> -->
+  <form class="collapse form-inlin p-3 border border-primary mb-5 mt-5" id="addProject" method="post" action="{% url 'task:project-create' %}">{% csrf_token %}
+  <input class="form-control mb-2  d-inline col-sm-9" placeholder="le nome de project ici" type="text"  name="name" maxlength="100" required="" id="id_name">
+  <button type="submit" class="btn btn-primary"><i class="far fa-arrow-alt-circle-right"></i></button>
+  </form>
 
-  <div class="main-panel">
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
-      <div class="container-fluid">
-        <div class="navbar-wrapper">
-
-          <a class="navbar-brand" href="#pablo">Dashboard</a>
-        </div>
-
-        <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="navbar-toggler-icon icon-bar"></span>
-          <span class="navbar-toggler-icon icon-bar"></span>
-          <span class="navbar-toggler-icon icon-bar"></span>
-        </button>
-
-        <div class="collapse navbar-collapse justify-content-end">
-          <ul class="navbar-nav">
-            <li class="nav-item">
-              <a class="nav-link" href="#pablo">
-                <i class="tim-icons icon-bell-55"></i>  Notifications
-              </a>
-            </li>
-             <!-- your navbar here -->
-          </ul>
-        </div>
-      </div>
-    </nav>
-    <!-- End Navbar -->
-    <div class="content">
-      <div class="container">
-        <div class="row">
-         <!-- your content here -->
-         <div class="col-md-6">
-          <a class="btn bg-default" data-toggle="collapse" href="#addProject" aria-expanded="true" aria-controls="blogForm">Ajouter Un Project</a>
-  <!-- <button data-toggle="collapse" data-target="#demo">Collapsible</button> -->
-        <form class="collapse form-inlin p-3 border border-primary mb-5 mt-5" id="addProject" method="post" action="{% url 'task:project-create' %}">{% csrf_token %}
-        <input class="form-control mb-2  d-inline col-sm-9" placeholder="le nome de project ici" type="text"  name="name" maxlength="100" required="" id="id_name">
-        <button type="submit" class="btn btn-primary"><i class="far fa-arrow-alt-circle-right"></i></button>
-        </form>
-      
-
-            <div class="card mt-5">
-              <div class="card-header bg-primary">
-                <h4 class="card-title"> Project List</h4>
-              </div>
-              <div class="card-body">
-                <ul class="list-group list-group-flush ">
-                    {% for project in projects %}
-                    <li class="list-group-item bg-transparent"><a class="text-white" href="{% url 'task:project-detail' project.id %}">{{ project.id}} - {{project.name}}</a></li>
-                    {% endfor %}
-                    
-                </div>
-              </div>
-            </div>
+  <div class="col-md-12">
+                                    
+            <table class="table mb-5 table-hover bg-ios">
+              <thead class="bg-primary">
+                <tr>
+                  <th> name </th>
+                  <th> description </th>
+                  <th> last_modefied </th>
+                  <th> update </th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for project in projects %}
+                <tr>
+                  <td>
+                  <a href="{{ project.get_absolute_url }}">{{ project.name }}</a></td>
+                  <td>{{project.description}}</td>
+                  <td>{{project.last_modefied}}</td>
+                  <td><i class="far fa-edit"></i></td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
           </div>
+
+
+     <!--  <div class="card mt-5">
+        <div class="card-header bg-primary">
+          <h4 class="card-title"> Project List</h4>
         </div>
+        <div class="card-body">
+          <ul class="list-group list-group-flush ">
+              {% for project in projects %}
+              <li class="list-group-item bg-transparent"><a class="text-white" href="{% url 'task:project-detail' project.id %}">{{ project.id}} - {{project.name}}</a>
+                {% empty %}
+                <p>you have no project yet</p>
+              {% endfor %}
+            </li>
+          </ul>
+          </div>
+        </div> -->
       </div>
     </div>
-    
   </div>
-
 {% endblock %}
