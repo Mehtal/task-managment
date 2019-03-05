@@ -1,0 +1,38 @@
+ <div class="sidebar">
+ 
+    <div class="sidebar-wrapper">
+      
+       <ul class="nav nav-pills">
+      <li class="nav-item">
+        <a href="{% url 'task:project-list' %}"><i class="fas fa-list-ul"></i> Home</a>
+      </li> 
+      {% if projects %}
+      <li class="nav-item">
+        <a   data-toggle="modal" data-target="#addProject"><i class="fas fa-folder-plus"></i> Add Project</a>
+      </li>
+      {% else %}
+      <li class="nav-item">
+        <a   data-toggle="modal" data-target="#addTaskModal"><i class="far fa-plus-square"></i> Add Task</a>
+      </li>
+      <li class="nav-item">
+        <a  data-toggle="modal" data-target="#addAreaModal"><i class="fas fa-map-marked-alt"></i> Add Location</a>
+        {% endif %}
+      </li>
+    
+    <li class="nav-item">
+        <a data-toggle="collapse" href="#stockCollapse" aria-expanded="false" aria-controls="stockCollapse"><i class="far fa-caret-square-down"></i> Stock </a>
+      </li> 
+      <div class="collapse" id="stockCollapse">
+      <li class="nav-item">
+        <a href="{% url 'stock:supply-list' %}"><i class="fas fa-list-ol"></i> Stock List </a>
+      </li> 
+      <li class="nav-item">
+        <a href="{% url 'stock:create' %}"><i class="fas fa-plus"></i> Stock Create</a>
+      </li> 
+      <li class="nav-item">
+        <a href="{% url 'stock:send' %}"><i class="fas fa-share-square"></i> Stock Send</a>
+      </li> 
+      </div>
+      </ul>
+    </div>
+  </div>

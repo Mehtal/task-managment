@@ -1,9 +1,37 @@
 {% extends 'base.html' %}
-
+{% load static %}
+{% load widget_tweaks %}
 {% block content %}
-<form method="post">{% csrf_token %}
-    {{ form.as_p }}
-  
-    <input type="submit" value="Save">
+
+ <div class="row p-4 bg-ios mb-5">
+    <p class="text-center text-uppercase text-monospace display-2 w-100">Restock Form</p>
+  </div>
+  <div class="row">
+
+<form class="w-100 p-5" method="post" novalidate>
+  {% csrf_token %}
+
+  {{ form.non_field_errors }}
+
+  {% for hidden_field in form.hidden_fields %}
+    {{ hidden_field.errors }}
+    {{ hidden_field }}
+  {% endfor %}
+
+  <div class="p-4 bg-ios mb-5">
+    {% for field in form.visible_fields %}
+     
+        {{ field.label_tag }}
+       
+          {{ field.errors }}
+          {% render_field field class="form-control bg-ios" placeholder=field.name %}
+          {{ field.help_text }}
+       
+      
+    {% endfor %}
+  </div>
+
+  <button class="btn btn-danger"type="submit">Submit</button>
 </form>
-{% endblock%}
+</div>
+{% endblock %}

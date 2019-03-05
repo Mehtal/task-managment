@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load widget_tweaks %}
 
 {% block title %}
 {{ object.name}} Project Detail View
@@ -82,7 +83,7 @@
 
 
 <!-- Modal -->
-<div class="modal fade" id="addAreaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade bg-ios" id="addAreaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog " role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -93,9 +94,27 @@
       </div>
       <div class="modal-body">
           <form id="area_form" method="post" action="{% url 'task:area-create' %}">{% csrf_token %}
-          {{ area_form.as_p}} 
-          {{ area_form.media }}
-          <hr/>     
+          {% csrf_token %}
+
+            {{ area_form.non_field_errors }}
+
+            {% for hidden_field in area_form.hidden_fields %}
+              {{ hidden_field.errors }}
+              {{ hidden_field }}
+            {% endfor %}
+
+            <div class="p-4  mb-5">
+              {% for field in area_form.visible_fields %}
+               
+                  {{ field.label_tag }}
+                 
+                    {{ field.errors }}
+                    {% render_field field class="form-control" placeholder=field.name %}
+                    {{ field.help_text }}
+                 
+                
+              {% endfor %}
+            </div>
           <button id="mybutton" type="button" class="btn btn-secondary" data-dismiss="modal">Ferme</button>
           <button type="submit" class="btn btn-primary">Ajouter</button>
           </form>
@@ -109,7 +128,7 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="addTaskModal" tabindex="-1" role="dialog"  aria-hidden="true">
+<div class="modal fade bg-ios" id="addTaskModal" tabindex="-1" role="dialog"  aria-hidden="true">
   <div class="modal-dialog " role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -120,9 +139,27 @@
       </div>
       <div class="modal-body">
           <form id="task_form" method="post" action="{% url 'task:task-create' %}">{% csrf_token %}
-          {{ task_form.as_p}} 
-          {{ task_form.media }}
-          <hr/>     
+          {% csrf_token %}
+
+            {{ task_form.non_field_errors }}
+
+            {% for hidden_field in task_form.hidden_fields %}
+              {{ hidden_field.errors }}
+              {{ hidden_field }}
+            {% endfor %}
+
+            <div class="p-4  mb-5">
+              {% for field in task_form.visible_fields %}
+               
+                  {{ field.label_tag }}
+                 
+                    {{ field.errors }}
+                    {% render_field field class="form-control" placeholder=field.name %}
+                    {{ field.help_text }}
+                 
+                
+              {% endfor %}
+             </div>
           <button id="mybutton" type="button" class="btn btn-secondary" data-dismiss="modal">Ferme</button>
           <button type="submit" class="btn btn-primary">Ajouter</button>
           </form>
@@ -135,7 +172,7 @@
   </div>
 </div>
          <!-- Modal -->
-<div class="modal fade" id="removeProject" tabindex="-1" role="dialog" aria-labelledby="removeProjectLabel" aria-hidden="true">
+<div class="modal fade bg-ios" id="removeProject" tabindex="-1" role="dialog" aria-labelledby="removeProjectLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -145,8 +182,8 @@
         </button>
       </div>
       <div class="modal-body">
-        <form method="post" action="{% url 'task:project-delete' project.id %}">{% csrf_token %}
-            <p>Are you sure you want to delete "{{ object }}"?</p>
+        <form  method="post" action="{% url 'task:project-delete' project.id %}">{% csrf_token %}
+            <strong class="text-primary">Are you sure you want to delete "{{ object }}"?</strong>
       
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Ferme</button>
         <button type="submit" class="btn btn-primary">Suprimer</button>

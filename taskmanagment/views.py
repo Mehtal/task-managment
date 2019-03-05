@@ -16,6 +16,11 @@ from django.urls import reverse_lazy
 # def dashboard(request):
 #     return render(request, 'dashboard.html', {})
 
+class ProjectUpdateView(UpdateView):
+    model = Project
+    fields = ["name", "description"]
+    template_name = "add-project.html"
+
 
 class ProjectCreateView(CreateView):
     model = Project
@@ -44,8 +49,11 @@ class ProjectDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(ProjectDetailView, self).get_context_data(**kwargs)
-        context['area_form'] = CreateAreaForm()
-        context['task_form'] = CreateTaskForm()
+        area_form_data = {"project": self.object.id}
+        task_form_data = {"area": self.object.areas.first()}
+        print(self.object.areas.all())
+        context['area_form'] = CreateAreaForm(initial=area_form_data)
+        context['task_form'] = CreateTaskForm(initial=task_form_data)
         return context
 
 
@@ -62,11 +70,15 @@ class AreaCreateView(CreateView):
     template_name = "add-area.html"
     success_url = "/"
 
+    # def get_context_data(self, **kwargs):
+    #     context = super(AreaCreateView, self).get_context_data(**kwargs)
+    #     ccontext["form"] = CreateAreaForm(request)
+
 
 # TASK CRUD
 
 class TaskCreateView(CreateView):
-    form_class = Task
+    form_class = CreateTaskForm
     template_name = 'add-task.html'
     # fields = ['area', 'name', 'debut', 'fin', ]
 
@@ -84,10 +96,8 @@ class TaskDetailView(DetailView):
             my_sum += tool.get_total()
         return my_sum
 
-    
-
 
 class TaskUpdateView(UpdateView):
     model = Task
-    fields = ["complete", ]
+    fields = ["name", "debut", "fin", "start", "complete", "area"]
     template_name = 'add-task.html'

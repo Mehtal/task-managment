@@ -14,8 +14,8 @@ class CreateTaskForm(ModelForm):
         model = Task
         fields = ['area', 'name', 'debut', 'fin', ]
 
-    # def __init__(self,  *args, **kwargs):
-    #     super().__init__( *args, **kwargs)
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
     #     project_id = request.GET.get("id")
     #     self.fields['area'].queryset = Area.objects.filter(id=project_id)
 
@@ -30,3 +30,17 @@ class CreateAreaForm(ModelForm):
     class Meta:
         model = Area
         fields = ['name', 'project']
+
+    # def __init__(self, *args, **kwargs):
+    #     self.request = kwargs.pop("request")
+    #     super(CreateAreaForm, self).__init__(*args, **kwargs)
+    #     self.fields["project"].queryset = Area.objects.filter(project__id=self.request.GET.get("id"))
+    #     print("form print ==============================")
+
+
+# class BookSubmitForm(ModelForm):
+#     def __init__(self, *args, **kwargs):
+#         self.request = kwargs.pop("request")
+#         super(BookSubmitForm, self).__init__(*args, **kwargs)
+#         self.fields["book"].queryset = Book.objects.filter(owner=self.request.user)
+#         self.fields["whatever"].queryset = WhateverModel.objects.filter(user=self.request.user)

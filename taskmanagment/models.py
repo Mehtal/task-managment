@@ -24,7 +24,7 @@ class Area(models.Model):
         Project, on_delete=models.CASCADE, related_name='areas')
 
     def __str__(self):
-        return "%s %s" % (self.name, self.project.name)
+        return "%s %s" % (self.project.name, self.name)
 
 
 class Task(models.Model):

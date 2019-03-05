@@ -43,8 +43,9 @@ def add_supply(request, pk):
 
 class SupplyUpdateView(UpdateView):
     model = Supply
-    form_class = SupplyForm
-    template_name = "restock.html"
+    # form_class = SupplyForm
+    fields = ["name" ,"quantity","unit_price"]
+    template_name = "supply-update.html"
     success_url = reverse_lazy("stock:supply-list")
 
     # def form_valid(self, form):
@@ -89,4 +90,4 @@ def send_supply_to_tasks(request):
             add_tool.save()
             form.save()
 
-    return render(request, "send.html", {"form": form, })
+    return render(request, "supply-send.html", {"form": form, })
