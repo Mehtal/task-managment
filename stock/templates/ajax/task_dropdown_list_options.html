@@ -1,0 +1,4 @@
+<option value="">---------</option>
+{% for task in tasks %}
+<option value="{{ task.pk }}">{{ task.name }}</option>
+{% endfor %}

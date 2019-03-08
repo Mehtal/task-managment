@@ -2,7 +2,7 @@ from django import forms
 from django.forms import ModelForm
 from django.contrib.admin.widgets import AdminDateWidget
 from django.forms.widgets import DateInput, DateTimeInput
-from .models import Task, Project, Area
+from .models import Task, Project, Area, Personel, Observation
 
 
 class CreateTaskForm(ModelForm):
@@ -31,16 +31,14 @@ class CreateAreaForm(ModelForm):
         model = Area
         fields = ['name', 'project']
 
-    # def __init__(self, *args, **kwargs):
-    #     self.request = kwargs.pop("request")
-    #     super(CreateAreaForm, self).__init__(*args, **kwargs)
-    #     self.fields["project"].queryset = Area.objects.filter(project__id=self.request.GET.get("id"))
-    #     print("form print ==============================")
+
+class CreatePersonelForm(ModelForm):
+    class Meta:
+        model = Personel
+        fields = ["name", "task"]
 
 
-# class BookSubmitForm(ModelForm):
-#     def __init__(self, *args, **kwargs):
-#         self.request = kwargs.pop("request")
-#         super(BookSubmitForm, self).__init__(*args, **kwargs)
-#         self.fields["book"].queryset = Book.objects.filter(owner=self.request.user)
-#         self.fields["whatever"].queryset = WhateverModel.objects.filter(user=self.request.user)
+class CreateObservationForm(ModelForm):
+    class Meta:
+        model = Observation
+        fields = ["name", "task"]

@@ -3,6 +3,14 @@
 
 {% block content %}
     <div class="container">
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-success" role="alert">
+           {{ message }}
+        </div>
+         {% endfor %}
+          {% endif %}
+       
     	<div class="row p-4 bg-ios mb-5">
     <p class="text-center text-uppercase text-monospace display-2 w-100">Stock List</p>
   </div>
@@ -26,9 +34,9 @@
         				{% for supply in object_list %}
         				<tr>
         					<td> <a href="">{{ supply.name  }}</a></td>
-        					<td>{{ supply.quanity  }}</td>
+        					<td>{{ supply.quantity  }}</td>
         					<td>{{ supply.unit_price  }}</td>
-        					<td>{{ supply.get_total  }}</td>
+        					<td>{{ supply.get_total  }} dzd</td>
         					<td>{{ supply.last_modefied }}</td>
                             <td><a href='{% url "stock:update" supply.id %}'><i class="fas fa-pencil-alt"></i></a></td>
                             <td><a href='{% url "stock:restock" supply.id %}'><i class="fas fa-cart-plus"></i></a></td>

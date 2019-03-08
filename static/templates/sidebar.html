@@ -4,18 +4,18 @@
       
        <ul class="nav nav-pills">
       <li class="nav-item">
-        <a href="{% url 'task:project-list' %}"><i class="fas fa-list-ul"></i> Home</a>
+        <a href="{% url 'task:project-list' %}"><i class="fas fa-list-ul"></i> accueil</a>
       </li> 
       {% if projects %}
-      <li class="nav-item">
-        <a   data-toggle="modal" data-target="#addProject"><i class="fas fa-folder-plus"></i> Add Project</a>
-      </li>
+      <!-- <li class="nav-item">
+        <a   data-toggle="modal" data-target="#AjoutéProject"><i class="fas fa-folder-plus"></i> Ajouté Project</a>
+      </li> -->
       {% else %}
       <li class="nav-item">
-        <a   data-toggle="modal" data-target="#addTaskModal"><i class="far fa-plus-square"></i> Add Task</a>
+        <a   data-toggle="modal" data-target="#AjoutéTaskModal"><i class="far fa-plus-square"></i> Ajouté Tache</a>
       </li>
       <li class="nav-item">
-        <a  data-toggle="modal" data-target="#addAreaModal"><i class="fas fa-map-marked-alt"></i> Add Location</a>
+        <a  data-toggle="modal" data-target="#AjoutéAreaModal"><i class="fas fa-map-marked-alt"></i> Ajouté Location</a>
         {% endif %}
       </li>
     
@@ -27,10 +27,10 @@
         <a href="{% url 'stock:supply-list' %}"><i class="fas fa-list-ol"></i> Stock List </a>
       </li> 
       <li class="nav-item">
-        <a href="{% url 'stock:create' %}"><i class="fas fa-plus"></i> Stock Create</a>
+        <a href="{% url 'stock:create' %}"><i class="fas fa-plus"></i>Create Stock </a>
       </li> 
       <li class="nav-item">
-        <a href="{% url 'stock:send' %}"><i class="fas fa-share-square"></i> Stock Send</a>
+        <a href="{% url 'stock:send' %}"><i class="fas fa-share-square"></i>Envoyer Stock </a>
       </li> 
       </div>
       </ul>

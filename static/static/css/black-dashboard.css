@@ -11523,16 +11523,24 @@ table.tablesorter thead tr .headerSortDown {
     border-bottom: 1px solid #F44336;
     grid-column: 1 / -1;
     width: 100%; }
-  .ios-card .bg-ios > * {
+  .ios-card .bg-ios > h4 {
     margin-bottom: 0px !important;
-    align-self: center;
+    align-self: start;
     padding: 15px; }
-    .ios-card .bg-ios > *:hover {
+    .ios-card .bg-ios > h4:hover {
       background-color: #F44336;
       border: none; }
 
 .delete-btn {
   margin-left: auto; }
+
+.delete-button {
+  position: absolute;
+  right: 27px;
+  top: 24px;
+  outline: 0;
+  padding: 1rem;
+  margin: -1rem -1rem -1rem auto; }
 
 /* Animations */
 .nav-pills .nav-link,

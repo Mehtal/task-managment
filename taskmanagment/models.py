@@ -43,21 +43,6 @@ class Task(models.Model):
     def get_absolute_url(self):
         return reverse('task:task-detail', args=[str(self.area.project.id), str(self.id,)])
 
-    # def get_start_time(self, time1=None, ):
-    #     if self.start == True and time1 == None:
-    #         time1 = datetime.datetime.now().time()
-    #         time1.save()
-    #         print("first statment ============")
-    #     if self.start == True and time1 != None:
-    #         self.start = False
-    #         time1 = datetime.datetime.now().time()
-    #         print("second statment ============")
-
-    #     else:
-    #         time1 = "task hasn't started yet"
-
-    #     return time1
-
     def get_status(self):
         if self.debut <= timezone.now().date() and self.fin >= timezone.now().date() and self.complete == False:
             self.status = "EN COURS"
@@ -90,19 +75,19 @@ class Task(models.Model):
         if self.complete == True:
             if self.timestamp.date() < self.fin:
                 timedelta = self.fin - self.timestamp.date()
-                return "you've finished {} days early".format(timedelta.days)
+                return "tu as fini {} jours en avance".format(timedelta.days)
             if self.fin < self.timestamp.date():
                 timedelta = self.timestamp.date() - self.fin
-                return "you've finished {} days late".format(timedelta.days)
+                return "tu as fini {} jours de retard".format(timedelta.days)
             else:
-                return "you've finished on timedelta"
+                return "tu as fini à l'heure"
         if self.complete == False:
             if self.timestamp.date() < self.fin:
                 timedelta = self.fin - self.timestamp.date()
-                return "{} days left to finish the task".format(timedelta.days)
+                return "{} jours restants pour achever la tâche".format(timedelta.days)
             if self.fin < self.timestamp.date():
                 timedelta = self.timestamp.date() - self.fin
-                return "you're {} days late".format(timedelta.days)
+                return "vous avez {} jours de retard".format(timedelta.days)
 
 
 class Personel(models.Model):
@@ -110,11 +95,23 @@ class Personel(models.Model):
     task = models.ForeignKey(
         Task, on_delete=models.CASCADE, related_name='personels')
 
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('task:task-detail', args=[str(self.task.area.project.id), str(self.task.id,)])
+
 
 class Observation(models.Model):
-    name = models.CharField(max_length=25)
+    name = models.CharField(max_length=150)
     task = models.ForeignKey(
         Task, on_delete=models.CASCADE, related_name='observations')
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('task:task-detail', args=[str(self.task.area.project.id), str(self.task.id,)])
 
 
 class Tool(models.Model):

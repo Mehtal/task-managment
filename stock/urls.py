@@ -10,4 +10,6 @@ urlpatterns = [
     path('send/', views.send_supply_to_tasks, name="send"),
     path("update/<int:pk>", views.SupplyUpdateView.as_view(), name="update"),
     path('list', views.SupplyListView.as_view(), name="supply-list"),
+    path('ajax/load-areas', views.load_areas, name="load-areas"),
+    path('ajax/load-tasks', views.load_tasks, name="load-tasks"),
 ]

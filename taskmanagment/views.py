@@ -1,20 +1,11 @@
 from django.shortcuts import render, reverse
+from django.contrib import messages
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
-from taskmanagment.models import Project, Tool, Task, Area
-from .forms import CreateTaskForm, CreateProjectForm, CreateAreaForm
+from taskmanagment.models import Project, Tool, Task, Area, Personel, Observation
+from .forms import CreateTaskForm, CreateProjectForm, CreateAreaForm, CreatePersonelForm, CreateObservationForm
 from django.urls import reverse_lazy
 # Create your views here.
 
-
-# project CRUD
-# def ProjectView(request):
-#     project = Project.objects.all()
-#     template = 'project.html'
-#     return render(request, template, {'project': project})
-
-
-# def dashboard(request):
-#     return render(request, 'dashboard.html', {})
 
 class ProjectUpdateView(UpdateView):
     model = Project
@@ -29,7 +20,7 @@ class ProjectCreateView(CreateView):
 
 
 class ProjectListView(ListView):
-    queryset = Project.objects.all()
+    queryset = Project.objects.all().order_by("name")
     template_name = 'project.html'
     context_object_name = 'projects'
 
@@ -41,7 +32,6 @@ class ProjectListView(ListView):
 
 
 class ProjectDetailView(DetailView):
-    #model = Project
     template_name = 'project-detail.html'
 
     def get_queryset(self):
@@ -66,13 +56,8 @@ class ProjectDeleteView(DeleteView):
 # AREA CRUD
 class AreaCreateView(CreateView):
     form_class = CreateAreaForm
-    # fields = ["name", "project"]
     template_name = "add-area.html"
     success_url = "/"
-
-    # def get_context_data(self, **kwargs):
-    #     context = super(AreaCreateView, self).get_context_data(**kwargs)
-    #     ccontext["form"] = CreateAreaForm(request)
 
 
 # TASK CRUD
@@ -80,11 +65,9 @@ class AreaCreateView(CreateView):
 class TaskCreateView(CreateView):
     form_class = CreateTaskForm
     template_name = 'add-task.html'
-    # fields = ['area', 'name', 'debut', 'fin', ]
 
 
 class TaskDetailView(DetailView):
-    #model = Task
     template_name = 'task-detail.html'
 
     def get_queryset(self):
@@ -96,8 +79,39 @@ class TaskDetailView(DetailView):
             my_sum += tool.get_total()
         return my_sum
 
+    def get_context_data(self, **kwargs):
+        context = super(TaskDetailView, self).get_context_data(**kwargs)
+        form_data1 = {"task": self.object.id}
+        context['personel_form'] = CreatePersonelForm(initial=form_data1)
+        context['observation_form'] = CreateObservationForm(initial=form_data1)
+        return context
+
 
 class TaskUpdateView(UpdateView):
     model = Task
     fields = ["name", "debut", "fin", "start", "complete", "area"]
     template_name = 'add-task.html'
+
+# personel Crud
+
+
+class PersonelCreateView(CreateView):
+    form_class = CreatePersonelForm
+    template_name = "add-personel.html"
+
+
+class PersonelDeleteView(DeleteView):
+    model = Personel
+    template_name = "delete-project.html"
+
+
+# Observation Crud
+
+class ObservationCreateView(CreateView):
+    form_class = CreateObservationForm
+    template_name = "add-observation.html"
+
+
+class ObservationDeleteView(DeleteView):
+    model = Observation
+    template_name = "delete-project.html"

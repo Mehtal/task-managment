@@ -2,13 +2,19 @@
 {% load static %}
 {% load widget_tweaks %}
 {% block content %}
-
- <div class="row p-4 bg-ios mb-5">
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-danger" role="alert">
+    <strong>Erreur</strong> {{ message }}
+</div>
+ {% endfor %}
+  {% endif %}
+  <div class="row p-4 bg-ios mb-5">
     <p class="text-center text-uppercase text-monospace display-2 w-100">Supply Send Form</p>
   </div>
   <div class="row">
 
-<form class="w-100 p-5" method="post" novalidate>
+<form id="sendForm" data-areas-url="{% url 'stock:load-areas' %}" data-tasks-url="{% url 'stock:load-tasks' %}" class="w-100 p-5" method="post" novalidate>
   {% csrf_token %}
 
   {{ form.non_field_errors }}
@@ -34,4 +40,38 @@
   <button class="btn btn-danger"type="submit">Submit</button>
 </form>
 </div>
+{% endblock %}
+{% block javascript %}
+<script>
+    $("#id_project").change(function () {
+      var url = $("#sendForm").attr("data-areas-url");  // get the url of the `load_areas` view
+      var projectId = $(this).val();  // get the selected project ID from the HTML input
+
+      $.ajax({                       // initialize an AJAX request
+        url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+        data: {
+          'project': projectId       // add the project id to the GET parameters
+        },
+        success: function (data) {   // `data` is the return of the `load_cities` view function
+          $("#id_area").html(data);  // replace the contents of the city input with the data that came from the server
+        }
+      });
+
+    });
+    $("#id_area").change(function () {
+      var url = $("#sendForm").attr("data-tasks-url");  // get the url of the `load_areas` view
+      var areaId = $(this).val();  // get the selected project ID from the HTML input
+
+      $.ajax({                       // initialize an AJAX request
+        url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+        data: {
+          'area': areaId       // add the project id to the GET parameters
+        },
+        success: function (data) {   // `data` is the return of the `load_cities` view function
+          $("#id_task").html(data);  // replace the contents of the city input with the data that came from the server
+        }
+      });
+
+    });
+  </script>
 {% endblock %}

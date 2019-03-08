@@ -789,9 +789,9 @@
     width: 100%
 
   }
-  .bg-ios > * {
+  .bg-ios > h4 {
     margin-bottom: 0px !important;
-    align-self: center;
+    align-self: start;
     padding:15px;
     
     &:hover {
@@ -806,3 +806,12 @@
   margin-left: auto;
 }
 
+
+.delete-button {
+  position: absolute;
+  right: 27px;
+  top: 24px;
+  outline: 0;
+  padding: 1rem;
+  margin: -1rem -1rem -1rem auto;
+}

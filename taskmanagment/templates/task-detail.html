@@ -1,31 +1,48 @@
 {% extends 'base.html' %}
-
+{% load widget_tweaks %}
 {% block title %}
 {{ object.name}} Task Detail View
 {% endblock title %}
 
 {% block content %}
 <div class="container p-5">
-	 <div class="row p-4 bg-ios">
-    <p class="text-center text-uppercase text-monospace display-2 w-100">{{ object.name}}  {{ view.get_sum }} $</p>
+
+	<div class="row p-4 bg-ios mb-3">
+    <p class="text-center text-uppercase text-monospace display-2 w-100">{{ object.name}}  {{ view.get_sum }} dzd</p>
   </div>
+	<div class="row p-4 mb-3">
+		   
+    <button type="button" class="btn btn-danger mr-2" data-toggle="modal" data-target="#addPersonelModal"><i class="fas fa-user-alt mr-3"></i> Ajouter Personnel
+</button>
+<button type="button" class="btn btn-danger mr-2" data-toggle="modal" data-target="#addObservationModal"><i class="far fa-comment mr-3"></i> Ajouter Observation
+</button>
+	</div>
+	
   <div class="row">
   	<div class="col-md-4 p-4 ios-card">
   		<div class="card bg-ios h-100">
+  			<h4 class="card-title w-100 text-center text-uppercase bg-primary"><strong>Observation</strong> </h4>
+  			{% for obj in object.observations.all %}
+  			<h4 class="card-title w-100 text-center text-uppercase">{{ obj.name }}</h4>
+  			{% endfor %}
   			
   		</div>
   		
   	</div>
   	<div class="col-md-4 p-4 ios-card">
   		<div class="card bg-ios h-100">
-  			<h4 class="card-title w-100 text-center text-uppercase">{{ object.get_start_time }}</h4>
+  			<h4 class="card-title w-100 text-center text-uppercase bg-primary"><strong>Personnel</strong></h4>
+  			
+  			{% for obj in object.personels.all %}
+  			<h4 class="card-title w-100 text-center text-uppercase">{{ obj.name }}</h4>
+  			{% endfor %}
   			
   		</div>
   		
   	</div>
   	<div class="col-md-4 p-4 ios-card">
   		<div class="card bg-ios h-100">
-  			<h4 class="card-title w-100 text-center text-uppercase">{{ object.area.project }}</h4>
+  			<h4 class="card-title w-100 text-center text-uppercase bg-primary">{{ object.area.project }}</h4>
   			<h4 class="card-title w-100 text-center text-uppercase">{{ object.area.name }}</h4>
   			<h4 class="card-title w-100 text-center text-uppercase">
   				<i class="fas fa-battery-half mr-2"></i> {{ object.get_status }} {{ object.complition_ratio }}%
@@ -41,27 +58,11 @@
   </div>
 
   <div class="row mt-5">
-  <!-- 	<div class="col-md-4 ">
-  		<div class="card">
-		  <h3 class="card-header bg-primary text-white font-italic">{{ object.name }}</h3>
-		  <div class="card-body">
-		    <h4 class="card-title">{{ object.area }}</h4>
-		    <ul class="list-group list-group-flush">
-			    <li class="list-group-item">start date : {{ object.debut }}</li>
-			    <li class="list-group-item">end date   : {{ object.fin }}</li>
-			    <li class="list-group-item">status	   : {{ object.get_status }}</li>
-			    <li class="list-group-item">complition : {{ object.complete }}</li>
-			    <li class="list-group-item">{% if object.task_info %} {{ object.task_info }} {% else%} task is not comeplte yet {% endif %} </li>
-		  	</ul>
-		    <a href="{% url 'task:project-detail' object.area.project.id %}" class="btn btn-primary">Retour</a>
-		  </div>
-		</div>
-  	</div> -->
 		<div class="col-md-12">
-		<table class="table table-bordred">
+		<table class="table table-bordred bg-ios">
 		<thead class="bg-primary">
 	    <tr class="font-italic">
-	      <th>Tool</th>
+	      <th>Outil</th>
 	      <th>Quantity</th>
 	      <th>Unit Price</th>
 	      <th>Total</th>
@@ -94,6 +95,89 @@
 		
 		
 	</div>	
+
+	<!-- Modal -->
+<div class="modal fade bg-ios" id="addPersonelModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog " role="document">
+    <div class="modal-content bg-dark">
+      <div class="modal-header">
+        <h5 class="modal-title text-white" id="exampleModalLongTitle">Ajouter Personnel</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <form id="personel_form" method="post" action="{% url 'task:personel-create' %}">{% csrf_token %}
+          {% csrf_token %}
+
+            {{ personel_form.non_field_errors }}
+
+            {% for hidden_field in personel_form.hidden_fields %}
+              {{ hidden_field.errors }}
+              {{ hidden_field }}
+            {% endfor %}
+
+            <div class="p-4  mb-5">
+              {% for field in personel_form.visible_fields %}
+               
+                  {{ field.label_tag }}
+                 
+                    {{ field.errors }}
+                    {% render_field field class="form-control" placeholder=field.name %}
+                    {{ field.help_text }}
+                 
+                
+              {% endfor %}
+            </div>
+          <button id="mybutton" type="button" class="btn btn-secondary" data-dismiss="modal">Ferme</button>
+          <button type="submit" class="btn btn-primary">Ajouter</button>
+          </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+	<!-- Modal -->
+<div class="modal fade bg-ios" id="addObservationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog " role="document">
+    <div class="modal-content bg-dark">
+      <div class="modal-header">
+        <h5 class="modal-title text-white" id="exampleModalLongTitle">Ajouter Observation</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <form id="observation_form" method="post" action="{% url 'task:observation-create' %}">{% csrf_token %}
+          {% csrf_token %}
+
+            {{ observation_form.non_field_errors }}
+
+            {% for hidden_field in observation_form.hidden_fields %}
+              {{ hidden_field.errors }}
+              {{ hidden_field }}
+            {% endfor %}
+
+            <div class="p-4  mb-5">
+              {% for field in observation_form.visible_fields %}
+               
+                  {{ field.label_tag }}
+                 
+                    {{ field.errors }}
+                    {% render_field field class="form-control" placeholder=field.name %}
+                    {{ field.help_text }}
+                 
+                
+              {% endfor %}
+            </div>
+          <button id="mybutton" type="button" class="btn btn-secondary" data-dismiss="modal">Ferme</button>
+          <button type="submit" class="btn btn-primary">Ajouter</button>
+          </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 var ctx = document.getElementById("myChart").getContext('2d');
 var myChart = new Chart(ctx, {

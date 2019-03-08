@@ -42,32 +42,31 @@ def get_supply_list():
     supply_list = Supply.objects.all().iterator()
     return supply_list
 
-# def get_tool_list(self, name):
-# 	tool_list = Tool.objects.get_or_create(name=name)
-# 	return tool_list
 
-
-class SendToTaskForm(forms.ModelForm):
+class SendToTaskForm(forms.Form):
 
     project = forms.ModelChoiceField(queryset=Project.objects.all())
     area = forms.ModelChoiceField(queryset=Project.objects.all())
     task = forms.ModelChoiceField(queryset=Area.objects.all())
     name = forms.ModelChoiceField(queryset=Supply.objects.all())
-
-    class Meta:
-        model = Supply
-        fields = ["name", "quantity", ]
+    quantity = forms.IntegerField(min_value=0)
 
     def __init__(self, *args, **kwargs):
         super(SendToTaskForm, self).__init__(*args, **kwargs)
         self.fields['name'].queryset = Supply.objects.all()
         self.fields['project'].queryset = Project.objects.all()
-        self.fields['area'].queryset = Area.objects.all()
-        self.fields['task'].queryset = Task.objects.all()
+        self.fields['area'].queryset = Area.objects.none()
+        self.fields['task'].queryset = Task.objects.none()
 
-    def clean(self):
-        cleaned_data = super().clean()
-        instance = self.instance
-
-        print("clean ------> ", cleaned_data, instance)
-        return cleaned_data
+        if 'project' in self.data:
+            try:
+                project_id = int(self.data.get('project'))
+                self.fields['area'].queryset = Area.objects.filter(project_id=project_id).order_by('name')
+            except (ValueError, TypeError):
+                pass  # invalid input from the client; ignore and fallback to empty area queryset
+        if 'area' in self.data:
+            try:
+                area_id = int(self.data.get('area'))
+                self.fields['task'].queryset = Task.objects.filter(area_id=area_id).order_by('name')
+            except (ValueError, TypeError):
+                pass  # invalid input from the client; ignore and fallback to empty area queryset
