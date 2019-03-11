@@ -6,15 +6,24 @@
 
 {% block content %}
 <div class="container p-5">
-
 	<div class="row p-4 bg-ios mb-3">
     <p class="text-center text-uppercase text-monospace display-2 w-100">{{ object.name}}  {{ view.get_sum }} dzd</p>
   </div>
+
+    <nav  aria-label="breadcrumb">
+    <ol class="breadcrumb bg-ios">
+      <li class="breadcrumb-item"><a href="{% url 'task:project-list' %} ">Accueil</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'task:project-detail' object.area.project.id %} ">Détails du projet</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Détails du tache</li>
+    </ol>
+  </nav>
+
 	<div class="row p-4 mb-3">
-		   
     <button type="button" class="btn btn-danger mr-2" data-toggle="modal" data-target="#addPersonelModal"><i class="fas fa-user-alt mr-3"></i> Ajouter Personnel
 </button>
 <button type="button" class="btn btn-danger mr-2" data-toggle="modal" data-target="#addObservationModal"><i class="far fa-comment mr-3"></i> Ajouter Observation
+</button>
+<button type="button" class="btn btn-danger text-white delete-btn" aria-label="Close" data-toggle="modal" data-target="#removeTask"> <span aria-hidden="true"><i class="far fa-trash-alt mr-2"></i>Suprimer</span>
 </button>
 	</div>
 	
@@ -132,6 +141,28 @@
           <button id="mybutton" type="button" class="btn btn-secondary" data-dismiss="modal">Ferme</button>
           <button type="submit" class="btn btn-primary">Ajouter</button>
           </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+ <!-- Modal -->
+<div class="modal fade bg-ios" id="removeTask" tabindex="-1" role="dialog" aria-labelledby="removeTaskLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content bg-dark">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addTaskLabel">Suprimer la tache </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form  method="post" action="{% url 'task:task-delete' object.id %}">{% csrf_token %}
+            <strong class="text-primary">Are you sure you want to delete "{{ object }}"?</strong>
+      
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Ferme</button>
+        <button type="submit" class="btn btn-primary">Suprimer</button>
+        </form>
       </div>
     </div>
   </div>

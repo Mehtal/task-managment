@@ -92,6 +92,16 @@ class TaskUpdateView(UpdateView):
     fields = ["name", "debut", "fin", "start", "complete", "area"]
     template_name = 'add-task.html'
 
+
+class TaskDeleteView(DeleteView):
+    model = Task
+    success_url = reverse_lazy("task:project-list")
+    template_name = "delete-project.html"
+
+    # def get_success_url(self):
+    #     super(TaskDeleteView, self).get_success_url()
+
+
 # personel Crud
 
 

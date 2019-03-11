@@ -14,6 +14,7 @@ urlpatterns = [
     path('area/create/', views.AreaCreateView.as_view(), name="area-create"),
     path('task/create/', views.TaskCreateView.as_view(), name="task-create"),
     path('task/update/<int:pk>', views.TaskUpdateView.as_view(), name="task-update"),
+    path('task/delete/<int:pk>', views.TaskDeleteView.as_view(), name="task-delete"),
     path('personel/create/', views.PersonelCreateView.as_view(), name="personel-create"),
     path('personel/delete/<int:pk>', views.PersonelDeleteView.as_view(), name="personel-delete"),
     path('observation/create/', views.ObservationCreateView.as_view(), name="observation-create"),
